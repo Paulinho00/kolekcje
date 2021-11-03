@@ -221,8 +221,10 @@ public class Person  implements Comparable  {
 		else {
 			if (!getFirstName().equals(person.getFirstName())) return getFirstName().compareTo(person.getFirstName());
 			else {
-				if (getBirthYear() < person.getBirthYear()) return -1;
-				else return 1;
+				if(getBirthYear()<person.getBirthYear()) return -1;
+				else if(getBirthYear()> person.getBirthYear()) return 1;
+				else return getJob().toString().compareTo(person.getJob().toString());
+
 			}
 		}
 	}
