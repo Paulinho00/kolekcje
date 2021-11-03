@@ -99,7 +99,9 @@ public class PersonConsoleApp {
 				case 3:
 					// zmiana danych dla aktualnej osoby
 					if (currentPerson == null) throw new PersonException("Żadna osoba nie została utworzona.");
+					collectionsContainer.remove(currentPerson);
 					changePersonData(currentPerson);
+					collectionsContainer.add(currentPerson);
 					break;
 				case 4: {
 					// odczyt danych z pliku tekstowego.
@@ -287,7 +289,7 @@ public class PersonConsoleApp {
 		for(Person person: treeSet1) {
 			UI.printMessage("######################");
 			showPerson(person);
-			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -296,7 +298,7 @@ public class PersonConsoleApp {
 		for(PersonEqualsHash personEqualsHash:treeSet2){
 			UI.printMessage("######################");
 			showPerson(personEqualsHash);
-			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -310,7 +312,7 @@ public class PersonConsoleApp {
 		for(Person person: arrayList1){
 			UI.printMessage("######################");
 			showPerson(person);
-			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -319,7 +321,7 @@ public class PersonConsoleApp {
 		for(PersonEqualsHash personEqualsHash:arrayList2){
 			UI.printMessage("######################");
 			showPerson(personEqualsHash);
-			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -333,7 +335,7 @@ public class PersonConsoleApp {
 		for(Person person: linkedList1){
 			UI.printMessage("######################");
 			showPerson(person);
-			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -342,7 +344,7 @@ public class PersonConsoleApp {
 		for(PersonEqualsHash personEqualsHash:linkedList2){
 			UI.printMessage("######################");
 			showPerson(personEqualsHash);
-			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -356,7 +358,7 @@ public class PersonConsoleApp {
 		for(Person person: hashMap1.keySet()){
 			UI.printMessage("######################");
 			showPerson(person);
-			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -365,7 +367,7 @@ public class PersonConsoleApp {
 		for(PersonEqualsHash personEqualsHash:hashMap2.keySet()){
 			UI.printMessage("######################");
 			showPerson(personEqualsHash);
-			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -379,7 +381,7 @@ public class PersonConsoleApp {
 		for(Person person: treeMap1.keySet()){
 			UI.printMessage("######################");
 			showPerson(person);
-			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
@@ -388,7 +390,7 @@ public class PersonConsoleApp {
 		for(PersonEqualsHash personEqualsHash:treeMap2.keySet()){
 			UI.printMessage("######################");
 			showPerson(personEqualsHash);
-			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
 			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
 			UI.printMessage("######################\n");
 		}
