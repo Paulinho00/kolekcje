@@ -1,6 +1,6 @@
 package tb.soft;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Program: Aplikacja działająca w oknie konsoli, która umożliwia testowanie 
@@ -17,14 +17,15 @@ public class PersonConsoleApp {
 	        "Autor: Paweł Rogaliński\n" +
 			"Data:  październik 2018 r.\n";
 
-	private static final String MENU = 
+	private static final String MENU =
 			"    M E N U   G Ł Ó W N E  \n" +
 			"1 - Podaj dane nowej osoby \n" +
 			"2 - Usuń dane osoby        \n" +
 			"3 - Modyfikuj dane osoby   \n" +
 			"4 - Wczytaj dane z pliku   \n" +
 			"5 - Zapisz dane do pliku   \n" +
-			"0 - Zakończ program        \n";	
+			"6 - Wyświetl wszystkie osoby   \n" +
+			"0 - Zakończ program        \n";
 	
 	private static final String CHANGE_MENU = 
 			"   Co zmienić?     \n" + 
@@ -34,6 +35,18 @@ public class PersonConsoleApp {
 			"4 - Stanowisko     \n" +
 	        "0 - Powrót do menu głównego\n";
 
+	private static final String COLLECTIONS_MENU =
+			" Jaką kolekcję wybierasz? \n"+
+			"1 - HashSet    \n"+
+			"2 - TreeSet    \n"+
+			"3 - ArrayList  \n"+
+			"4 - LinkedList \n"+
+			"5 - HashMap    \n"+
+			"6 - TreeMap    \n"+
+	        "0 - Powrót do menu głównego\n";
+
+	private static final CollectionsContainer collectionsContainer = new CollectionsContainer();
+
 	
 	/**
 	 * ConsoleUserDialog to pomocnicza klasa zawierająca zestaw
@@ -41,7 +54,7 @@ public class PersonConsoleApp {
 	 * w oknie konsoli tekstowej.
 	 */
 	private static final ConsoleUserDialog UI = new ConsoleUserDialog();
-	
+
 	
 	public static void main(String[] args) {
 		// Utworzenie obiektu aplikacji konsolowej
@@ -75,9 +88,11 @@ public class PersonConsoleApp {
 				case 1:
 					// utworzenie nowej osoby
 					currentPerson = createNewPerson();
+					collectionsContainer.add(currentPerson);
 					break;
 				case 2:
 					// usunięcie danych aktualnej osoby.
+					collectionsContainer.remove(currentPerson);
 					currentPerson = null;
 					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
 					break;
@@ -90,6 +105,7 @@ public class PersonConsoleApp {
 					// odczyt danych z pliku tekstowego.
 					String file_name = UI.enterString("Podaj nazwę pliku: ");
 					currentPerson = Person.readFromFile(file_name);
+					collectionsContainer.add(currentPerson);
 					UI.printInfoMessage("Dane aktualnej osoby zostały wczytane z pliku " + file_name);
 				}
 					break;
@@ -98,6 +114,9 @@ public class PersonConsoleApp {
 					String file_name = UI.enterString("Podaj nazwę pliku: ");
 					Person.printToFile(file_name, currentPerson);
 					UI.printInfoMessage("Dane aktualnej osoby zostały zapisane do pliku " + file_name);
+				}
+				case 6: {
+					collectionsMenu();
 				}
 
 					break;
@@ -115,6 +134,26 @@ public class PersonConsoleApp {
 			}
 		} // koniec pętli while
 	}
+
+	public void collectionsMenu() throws PersonException{
+		while(true){
+			UI.clearConsole();
+			showCurrentPerson();
+
+				switch (UI.enterInt(COLLECTIONS_MENU + "==>> ")){
+					case 1: showHashSet(); break;
+					case 2: showTreeSet(); break;
+					case 3: showArrayList(); break;
+					case 4: showLinkedList(); break;
+					case 5: showHashMap(); break;
+					case 6: showTreeMap(); break;
+					case 0: return;
+
+				}
+
+
+		}
+	}
 	
 	
 	/*
@@ -122,6 +161,7 @@ public class PersonConsoleApp {
 	 *  pamiętanej w zmiennej currentPerson.
 	 */
 	void showCurrentPerson() {
+		System.out.println("Aktualna osoba:");
 		showPerson(currentPerson);
 	} 
 
@@ -134,8 +174,7 @@ public class PersonConsoleApp {
 		StringBuilder sb = new StringBuilder();
 		
 		if (person != null) {
-			sb.append("Aktualna osoba: \n")
-			  .append("      Imię: ").append(person.getFirstName()).append("\n")
+			  sb.append("      Imię: ").append(person.getFirstName()).append("\n")
 			  .append("  Nazwisko: ").append(person.getLastName()).append("\n")
 			  .append("   Rok ur.: ").append(person.getBirthYear()).append("\n")
 			  .append("Stanowisko: ").append(person.getJob()).append("\n");
@@ -214,6 +253,144 @@ public class PersonConsoleApp {
 				// Drukowanie komunikatu o błędzie zgłoszonym za pomocą wyjątku PersonException.
 				UI.printErrorMessage(e.getMessage());
 			}
+		}
+	}
+
+	public void showHashSet() throws PersonException{
+		Set<Person> hashSet1 = collectionsContainer.getHashSet1();
+		Set<PersonEqualsHash> hashSet2 = collectionsContainer.getHashSet2();
+		PersonEqualsHash currentPersonEqualHash = new PersonEqualsHash(currentPerson);
+		UI.printMessage("HashSet z obiektami bez implementacji equals() i hashCode()");
+		for(Person person: hashSet1) {
+			UI.printMessage("######################");
+			showPerson(person);
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+		UI.clearConsole();
+		UI.printMessage("HashSet z obiektami z implementacją equals() i hashCode()");
+		for(PersonEqualsHash personEqualsHash:hashSet2){
+			UI.printMessage("######################");
+			showPerson(personEqualsHash);
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktualnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+	}
+
+	public void showTreeSet() throws PersonException{
+		Set<Person> treeSet1 = collectionsContainer.getTreeSet1();
+		Set<PersonEqualsHash> treeSet2 = collectionsContainer.getTreeSet2();
+		PersonEqualsHash currentPersonEqualHash = new PersonEqualsHash(currentPerson);
+		UI.printMessage("TreeSet z obiektami bez implementacji equals() i hashCode()");
+		for(Person person: treeSet1) {
+			UI.printMessage("######################");
+			showPerson(person);
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+		UI.clearConsole();
+		UI.printMessage("TreeSet z obiektami z implementacją equals() i hashCode()");
+		for(PersonEqualsHash personEqualsHash:treeSet2){
+			UI.printMessage("######################");
+			showPerson(personEqualsHash);
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+	}
+
+	public void showArrayList() throws PersonException{
+		List<Person> arrayList1 = collectionsContainer.getArrayList1();
+		List<PersonEqualsHash> arrayList2 = collectionsContainer.getArrayList2();
+		PersonEqualsHash currentPersonEqualHash = new PersonEqualsHash(currentPerson);
+		UI.printMessage("ArrayList z obiektami bez implementacji equals() i hashCode()");
+		for(Person person: arrayList1){
+			UI.printMessage("######################");
+			showPerson(person);
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+		UI.clearConsole();
+		UI.printMessage("ArrayList z obiektami z implementacją equals() i hashCode()");
+		for(PersonEqualsHash personEqualsHash:arrayList2){
+			UI.printMessage("######################");
+			showPerson(personEqualsHash);
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+	}
+
+	public void showLinkedList() throws PersonException{
+		List<Person> linkedList1 = collectionsContainer.getLinkedList1();
+		List<PersonEqualsHash> linkedList2 = collectionsContainer.getLinkedList2();
+		PersonEqualsHash currentPersonEqualHash = new PersonEqualsHash(currentPerson);
+		UI.printMessage("LinkedList z obiektami bez implementacji equals() i hashCode()");
+		for(Person person: linkedList1){
+			UI.printMessage("######################");
+			showPerson(person);
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+		UI.clearConsole();
+		UI.printMessage("LinkedList z obiektami z implementacją equals() i hashCode()");
+		for(PersonEqualsHash personEqualsHash:linkedList2){
+			UI.printMessage("######################");
+			showPerson(personEqualsHash);
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+	}
+
+	public void showHashMap() throws PersonException{
+		Map<Person, Integer> hashMap1 = collectionsContainer.getHashMap1();
+		Map<PersonEqualsHash, Integer> hashMap2 = collectionsContainer.getHashMap2();
+		PersonEqualsHash currentPersonEqualHash = new PersonEqualsHash(currentPerson);
+		UI.printMessage("HashMap z obiektami bez implementacji equals() i hashCode()");
+		for(Person person: hashMap1.keySet()){
+			UI.printMessage("######################");
+			showPerson(person);
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+		UI.clearConsole();
+		UI.printMessage("HashMap z obiektami z implementacją equals() i hashCode()");
+		for(PersonEqualsHash personEqualsHash:hashMap2.keySet()){
+			UI.printMessage("######################");
+			showPerson(personEqualsHash);
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+	}
+
+	public void showTreeMap() throws PersonException{
+		Map<Person, Integer> treeMap1 = collectionsContainer.getTreeMap1();
+		Map<PersonEqualsHash, Integer> treeMap2 = collectionsContainer.getTreeMap2();
+		PersonEqualsHash currentPersonEqualHash = new PersonEqualsHash(currentPerson);
+		UI.printMessage("TreeMap z obiektami bez implementacji equals() i hashCode()");
+		for(Person person: treeMap1.keySet()){
+			UI.printMessage("######################");
+			showPerson(person);
+			if(person.equals(currentPerson)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
+		}
+		UI.clearConsole();
+		UI.printMessage("TreeMap z obiektami z implementacją equals() i hashCode()");
+		for(PersonEqualsHash personEqualsHash:treeMap2.keySet()){
+			UI.printMessage("######################");
+			showPerson(personEqualsHash);
+			if(personEqualsHash.equals(currentPersonEqualHash)) UI.printMessage("Porównanie z aktulnie wybraną osobą: to ta sama osoba");
+			else UI.printMessage("Porównanie z aktualnie wybraną osobą: to jest inna osoba");
+			UI.printMessage("######################\n");
 		}
 	}
 	
