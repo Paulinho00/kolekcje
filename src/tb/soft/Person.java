@@ -81,10 +81,10 @@ class PersonException extends Exception {
  */
 public class Person  implements Comparable  {
 	
-	private String firstName;
-	private String lastName;
-	private int birthYear;
-	private PersonJob job;
+	protected String firstName;
+	protected String lastName;
+	protected int birthYear;
+	protected PersonJob job;
  
 	
 	public Person(String first_name, String last_name) throws PersonException {
