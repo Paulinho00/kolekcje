@@ -1,5 +1,6 @@
 package tb.soft;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -78,12 +79,12 @@ public class PersonConsoleApp {
 	 */
 	public void runMainLoop() {
 		UI.printMessage(GREETING_MESSAGE);
-
+		try {
+			loadStartingScenario();
 		while (true) {
-			UI.clearConsole();
-			showCurrentPerson();
 
-			try {
+				UI.clearConsole();
+				showCurrentPerson();
 				switch (UI.enterInt(MENU + "==>> ")) {
 				case 1:
 					// utworzenie nowej osoby
@@ -127,13 +128,13 @@ public class PersonConsoleApp {
 					UI.printInfoMessage("\nProgram zakończył działanie!");
 					System.exit(0);
 				} // koniec instrukcji switch
-			} catch (PersonException e) { 
-				// Tu są wychwytywane wyjątki zgłaszane przez metody klasy Person,
-				// gdy nie są spełnione ograniczenia nałożone na dopuszczalne wartości
-				// poszczególnych atrybutów.
-				// Drukowanie komunikatu o błędzie zgłoszonym za pomocą wyjątku PersonException.
-				UI.printErrorMessage(e.getMessage());
 			}
+		} catch (PersonException e) {
+			// Tu są wychwytywane wyjątki zgłaszane przez metody klasy Person,
+			// gdy nie są spełnione ograniczenia nałożone na dopuszczalne wartości
+			// poszczególnych atrybutów.
+			// Drukowanie komunikatu o błędzie zgłoszonym za pomocą wyjątku PersonException.
+			UI.printErrorMessage(e.getMessage());
 		} // koniec pętli while
 	}
 
@@ -256,6 +257,28 @@ public class PersonConsoleApp {
 				UI.printErrorMessage(e.getMessage());
 			}
 		}
+	}
+
+	private void loadStartingScenario() throws PersonException{
+		try {
+			BufferedReader rd = new BufferedReader(new FileReader(new File("Starting_Scenario")));
+			String line = rd.readLine();
+			while(line != null){
+				String[] txt = line.split("#");
+				Person person = new Person(txt[0], txt[1]);
+				person.setBirthYear(txt[2]);
+				person.setJob(txt[3]);
+				collectionsContainer.add(person);
+				currentPerson = person;
+				line = rd.readLine();
+			}
+
+		}catch(FileNotFoundException e){
+			System.out.println("Nie odnaleziono pliku");
+		}catch(IOException e){
+			System.out.println("Wystąpił błąd podczas pobierania z pliku");
+		}
+
 	}
 
 	public void showHashSet() throws PersonException{
