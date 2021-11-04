@@ -26,6 +26,7 @@ public class PersonConsoleApp {
 			"4 - Wczytaj dane z pliku   \n" +
 			"5 - Zapisz dane do pliku   \n" +
 			"6 - Wyświetl wszystkie osoby   \n" +
+			"7 - Zobacz działanie equals() i hashCode()   \n" +
 			"0 - Zakończ program        \n";
 	
 	private static final String CHANGE_MENU = 
@@ -118,10 +119,12 @@ public class PersonConsoleApp {
 					Person.printToFile(file_name, currentPerson);
 					UI.printInfoMessage("Dane aktualnej osoby zostały zapisane do pliku " + file_name);
 				}
+					break;
 				case 6: {
 					collectionsMenu();
 				}
-
+					break;
+				case 7: showEqualsHashDiff();
 					break;
 				case 0:
 					// zakończenie działania programu
@@ -418,6 +421,26 @@ public class PersonConsoleApp {
 			UI.printMessage("######################\n");
 		}
 	}
-	
+
+	public void showEqualsHashDiff() throws PersonException {
+		PersonEqualsHash personEqualsHash = new PersonEqualsHash(currentPerson);
+		UI.printMessage("######################");
+		showCurrentPerson();
+		UI.printMessage("hashCode bez implementacji: " + currentPerson.hashCode() );
+		UI.printMessage("hashCode z implementacją: " + personEqualsHash.hashCode());
+		System.out.println("");
+
+		Person clonedPerson = new Person(currentPerson.getFirstName(), currentPerson.getLastName());
+		clonedPerson.setBirthYear(currentPerson.getBirthYear());
+		clonedPerson.setJob(currentPerson.getJob());
+		PersonEqualsHash clonedPersonEqualHash = new PersonEqualsHash(clonedPerson);
+
+		UI.printMessage("Klon aktualnie wybranej osoby: ");
+		showPerson(clonedPerson);
+		UI.printMessage("Wynik metody equals dla identycznych, sklonowanych obiektów (bez implementacji):" + currentPerson.equals(clonedPerson));
+		UI.printMessage("Wynik metody equals dla identycznych, sklonowanych obiektów (z własną implementacją):" + clonedPersonEqualHash.equals(personEqualsHash));
+
+		UI.printMessage("######################");
+	}
 	
 }  // koniec klasy PersonConsoleApp
